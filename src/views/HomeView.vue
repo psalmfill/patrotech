@@ -22,7 +22,7 @@ import TheWelcome from '../components/TheWelcome.vue'
           <el-form-item label="Password" class="w-100">
             <el-input v-model="form.password" type="password" size="large" show-password />
           </el-form-item>
-          <el-button size="large" class="btn-block text-white">Sign in</el-button>
+          <el-button v-loading="isLoading" size="large" class="btn-block text-white" @click="login">Sign in</el-button>
         </el-form>
       </el-col>
     </el-row>
@@ -30,13 +30,36 @@ import TheWelcome from '../components/TheWelcome.vue'
 </template>
 <script>
 import { reactive } from 'vue'
+import axios from '../plugins/axios'
 export default {
   data() {
     return {
+      isLoading: false,
       form: reactive({
         phoneNumber: "",
         password: ""
       })
+    }
+  },
+  methods: {
+    login() {
+      this.isLoading = true
+      axios.post('/auth/login', this.form).then(response => {
+        console.log('response', response)
+        localStorage.setItem('access_token', response.access_token)
+        this.isLoading = false
+        this.$router.push('/dashboard')
+      }).catch(error => {
+        console.log('error', error)
+        this.isLoading = false
+      })
+    }
+  },
+
+  created() {
+    const token = localStorage.getItem('access_token')
+    if (token) {
+      this.$router.push('dashboard')
     }
   }
 }

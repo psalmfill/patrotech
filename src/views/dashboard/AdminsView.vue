@@ -2,6 +2,11 @@
     <div class="container pt-4">
         <h1>Admins</h1>
         <el-divider />
+        <div class="row">
+            <div class="col-md-4 offset-8 text-right">
+                <el-button type="primary" @click="dialogFormVisible = true">New Admin</el-button>
+            </div>
+        </div>
         <el-table style="width: 100%" :data="filteredTableData">
             <el-table-column label="SN" type="index" />
             <el-table-column label="Date" prop="date" />
@@ -23,10 +28,12 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 export default {
     data() {
         return {
             search: '',
+            dialogFormVisible: ref(false),
             users: [
                 {
                     date: '2016-05-03',

@@ -5,6 +5,7 @@ import BootstrapVue from "bootstrap-vue";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import "./assets/main.css";
+// import axios from "./plugins/axios";
 /* import the fontawesome core */
 import { library } from "@fortawesome/fontawesome-svg-core";
 
@@ -25,6 +26,8 @@ import {
 
 import VueGoogleMaps from "@fawmi/vue-google-maps";
 
+import axios from "axios";
+import VueAxios from "vue-axios";
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
@@ -37,6 +40,7 @@ library.add(
   faTasks,
   faDashboard
 );
+app.use(VueAxios, axios);
 app.use(router);
 // app.use(BootstrapVue);
 app.use(VueGoogleMaps, {

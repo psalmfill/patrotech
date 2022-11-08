@@ -4,6 +4,7 @@ import DashboardView from "../views/DashboardView.vue";
 import DashboardHomeView from "../views/dashboard/DashboardHomeView.vue";
 import AdminsView from "../views/dashboard/AdminsView.vue";
 import UsersView from "../views/dashboard/UsersView.vue";
+import UserView from "../views/dashboard/UserView.vue";
 import OfficersView from "../views/dashboard/OfficersView.vue";
 import TasksView from "../views/dashboard/TasksView.vue";
 import ProfileView from "../views/dashboard/ProfileView.vue";
@@ -34,6 +35,11 @@ const router = createRouter({
           path: "users",
           name: "dashboard-users",
           component: UsersView,
+        },
+        {
+          path: "users/:id",
+          name: "dashboard-users-detail",
+          component: UserView,
         },
         {
           path: "officers",
