@@ -46,7 +46,8 @@ export default {
       this.isLoading = true
       axios.post('/auth/login', this.form).then(response => {
         console.log('response', response)
-        localStorage.setItem('access_token', response.access_token)
+        localStorage.setItem('access_token', JSON.stringify(response.data))
+
         this.isLoading = false
         this.$router.push('/dashboard')
       }).catch(error => {

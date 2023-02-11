@@ -8,6 +8,10 @@ import UserView from "../views/dashboard/UserView.vue";
 import OfficersView from "../views/dashboard/OfficersView.vue";
 import TasksView from "../views/dashboard/TasksView.vue";
 import ProfileView from "../views/dashboard/ProfileView.vue";
+import TeamTypesView from "../views/dashboard/TeamTypesView.vue";
+import TeamView from "../views/dashboard/TeamView.vue";
+import TeamDetailView from "../views/dashboard/TeamDetailView.vue";
+// import ProfileView from "../views/dashboard/ProfileView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -50,6 +54,21 @@ const router = createRouter({
           path: "tasks",
           name: "dashboard-tasks",
           component: TasksView,
+        },
+        {
+          path: "team-types",
+          name: "dashboard-team-types",
+          component: TeamTypesView,
+        },
+        {
+          path: "teams",
+          name: "dashboard-teams",
+          component: TeamView,
+        },
+        {
+          path: "teams/:id",
+          name: "dashboard-team-detail",
+          component: TeamDetailView,
         },
         {
           path: "profile",

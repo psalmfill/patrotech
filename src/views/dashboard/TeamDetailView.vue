@@ -1,14 +1,14 @@
 <template>
     <div class="container pt-4">
-        <h3>Users</h3>
+        <h3>{{ team.name }} Officers</h3>
         <el-divider />
         <div class="row">
             <div class="col-md-4 offset-8 text-right">
-                <el-button type="primary" @click="dialogFormVisible = true">New User</el-button>
+                <el-button type="primary" @click="dialogFormVisible = true">Add Officers</el-button>
             </div>
         </div>
         <br>
-        <el-table style="width: 100%" :data="users" stripe border>
+        <el-table style="width: 100%" :data="team.members" stripe border>
             <el-table-column label="SN" type="index" />
             <el-table-column label="First Name" prop="firstName" />
             <el-table-column label="Last Name" prop="lastName" />
@@ -17,76 +17,47 @@
             <el-table-column label="State" prop="state.name" />
             <el-table-column label="City" prop="city.name" />
             <el-table-column label="Join Date" prop="createdAt"
-                :formatter="(v) => new Date(v.createdAt).toDateString()" />
+                :formatter="(value) => new Date(value.createdAt).toDateString()" />
 
             <el-table-column align="center">
                 <template #header>
-                    <!-- <el-input v-model="search" placeholder="Type to search" /> -->
-                    Action
+                    <el-input v-model="search" placeholder="Type to search" />
                 </template>
                 <template #default="scope">
 
                     <router-link :to="`/dashboard/users/${scope.row.id}`">
-                        <el-button type="primary" :icon="View">View </el-button>
+                        <el-button>View</el-button>
                     </router-link>
+                    <el-button @click="removeTeamMember(scope.row)" class="btn-danger ml-1">Remove</el-button>
+
                 </template>
             </el-table-column>
         </el-table>
     </div>
-    <el-dialog v-model="dialogFormVisible" title="New User" width="40%">
+    <el-dialog v-model="dialogFormVisible" title="Add Officers" width="40%">
         <el-alert v-if="alert.message" :title="alert.message" :type="alert.type" effect="dark"
             @close="() => { alert = { message: '', type: '' }; }" />
         <el-form v-loading="saving" :model="form" label-position="top">
-            <el-form-item label="First name" :label-width="formLabelWidth">
-                <el-input v-model="form.firstName" autocomplete="off" />
-            </el-form-item>
-            <el-form-item label="Last name" :label-width="formLabelWidth">
-                <el-input v-model="form.lastName" autocomplete="off" />
-            </el-form-item>
-            <el-form-item label="Gender" :label-width="formLabelWidth">
-                <el-select v-model="form.gender" placeholder="Please select gender">
-                    <el-option label="Male" value="male" />
-                    <el-option label="Female" value="female" />
-                </el-select>
-            </el-form-item>
-            <el-form-item label="Email" :label-width="formLabelWidth">
-                <el-input v-model="form.email" autocomplete="off" />
-            </el-form-item>
-            <el-form-item label="Phone Number" :label-width="formLabelWidth">
-                <el-input v-model="form.phoneNumber" autocomplete="off" />
-            </el-form-item>
-            <el-row :gutter="10">
-                <el-col :span="8">
-                    <el-form-item label="Country" :label-width="formLabelWidth">
-                        <el-select @change="getStates" v-model="form.countryId" placeholder="Please select country">
-                            <el-option v-for="country in countries" :key="country.id" :label="country.name"
-                                :value="country.id" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="State" :label-width="formLabelWidth">
-                        <el-select @change="getCities" v-model="form.stateId" placeholder="Please select state">
-                            <el-option v-for="state in states" :key="state.id" :label="state.name" :value="state.id" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="City" :label-width="formLabelWidth">
-                        <el-select v-model="form.cityId" placeholder="Please select city">
-                            <el-option v-for="city in cities" :key="city.id" :label="city.name" :value="city.id" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-form-item label="Address" :label-width="formLabelWidth">
-                <el-input v-model="form.name" autocomplete="off" />
+            <el-form-item label="Team Members">
+                <el-select-v2 v-model="form.membersIds" value-key="id" label-key="id" style="width:100%" multiple
+                    filterable remote :remote-method="getUsers" clearable :options="users.map(e => {
+                        return {
+                            ...e, label: `${e.firstName} ${e.lastName}`
+                        }
+                    })" :loading="loading" placeholder="Please enter a user name">
+                    <template #default="{ item }">
+                        <span style="margin-right: 8px; color:black" class="text-secondary">{{ item.firstName }} {{
+                            item.lastName
+                        }}</span>
+                    </template>
+                </el-select-v2>
+
             </el-form-item>
         </el-form>
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">Cancel</el-button>
-                <el-button @click="saveUser" type="primary">
+                <el-button @click="addMembers" type="primary">
                     Save
                 </el-button>
             </span>
@@ -98,32 +69,17 @@
 import { isArray } from '@vue/shared'
 import { reactive, ref } from 'vue'
 import axios from '../../plugins/axios'
-import {
-    Check,
-    Delete,
-    Edit,
-    Message,
-    Search,
-    Star,
-    View
-} from '@element-plus/icons-vue'
+
 export default {
     data() {
         return {
             form: {
-                firstName: '',
-                lastName: '',
-                gender: '',
-                email: '',
-                countryId: '',
-                stateId: '',
-                cityId: '',
-                address: ''
+                membersIds: [],
             },
-            View,
             dialogFormVisible: ref(false),
             search: '',
             users: [],
+            team: {},
             countries: [],
             states: [],
             cities: [],
@@ -140,10 +96,52 @@ export default {
         }
     },
     methods: {
+        async removeTeamMember(member) {
+
+            const id = this.$route.params.id
+
+            ElMessageBox.confirm(
+                `${member.firstName} ${member.lastName} will be permanently removed from the team. Continue?`,
+                'Warning',
+                {
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning',
+                })
+                .then(() => {
+                    axios.delete(`admin/teams/${id}/remove-member/${member.id}`).then(response => {
+                        this.team = response.data
+
+                        ElMessage({
+                            type: 'success',
+                            message: 'Delete completed',
+                        })
+                    }).catch((e) => {
+
+                        ElMessage({
+                            type: 'error',
+                            message: 'Delete failed' + e,
+                        })
+                    })
+                })
+                .catch(() => {
+                    ElMessage({
+                        type: 'info',
+                        message: 'Delete canceled',
+                    })
+                })
+        },
         getUsers() {
             axios.get('admin/users').then(response => {
                 console.log('response', response)
                 this.users = response.data
+            })
+        },
+        getTeam() {
+            const id = this.$route.params.id
+            axios.get(`admin/teams/${id}`).then(response => {
+                console.log('team', response.data)
+                this.team = response.data
             })
         },
         getCountries() {
@@ -176,14 +174,15 @@ export default {
 
             }
         },
-        saveUser() {
+        addMembers() {
+            const id = this.$route.params.id
             this.saving = true
-            axios.post('admin/users', this.form).then(response => {
+            axios.post(`admin/teams/${id}/add-members`, this.form).then(response => {
                 console.log('saved', response.data)
-                this.users.push(response.data)
+                this.team = response.data
                 this.saving = false
                 this.alert = {
-                    message: 'New user created successfully',
+                    message: 'New officers added successfully',
                     type: 'success'
                 }
 
@@ -201,6 +200,7 @@ export default {
     },
     created() {
         this.getUsers()
+        this.getTeam()
         this.getCountries()
     },
 }

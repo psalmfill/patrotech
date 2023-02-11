@@ -6,7 +6,7 @@
                 <h2 class="m-3 text-center text-white">Patrotech</h2>
                 <el-divider />
                 <el-menu default-active="2" router="true" text-color="#fff" class="el-menu-vertical-demo"
-                    background-color="#0f142e" @open="handleOpen" @close="handleClose" active-text-color="#ccc">
+                    background-color="#3185FC" @open="handleOpen" @close="handleClose" active-text-color="#ccc">
                     <el-menu-item index="/dashboard">
                         <el-icon :size="20" :color="'red'">
                             <font-awesome-icon icon="fa-solid fa-dashboard" size="xs" />
@@ -30,6 +30,18 @@
                             <font-awesome-icon icon="fa-solid fa-users" size="xs" />
                         </el-icon>
                         <span>Officers</span>
+                    </el-menu-item>
+                    <el-menu-item index="/dashboard/team-types">
+                        <el-icon :size="20" :color="'red'">
+                            <font-awesome-icon icon="fa fa-tasks" size="xs" />
+                        </el-icon>
+                        <span>Team Types</span>
+                    </el-menu-item>
+                    <el-menu-item index="/dashboard/teams">
+                        <el-icon :size="20" :color="'red'">
+                            <font-awesome-icon icon="fa-solid fa-users" size="xs" />
+                        </el-icon>
+                        <span>Teams</span>
                     </el-menu-item>
                     <el-menu-item index="/dashboard/tasks">
                         <el-icon :size="20" :color="'red'">
@@ -96,7 +108,7 @@ export default {
 </script>
 <style>
 .side-bar {
-    background-color: #0f142e
+    background-color: #3185FC
 }
 
 .flex-grow {
