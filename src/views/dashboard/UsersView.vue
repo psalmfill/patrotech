@@ -25,10 +25,7 @@
                     Action
                 </template>
                 <template #default="scope">
-
-                    <router-link :to="`/dashboard/users/${scope.row.id}`">
-                        <el-button type="primary" :icon="View">View </el-button>
-                    </router-link>
+                        <el-button type="primary" :icon="View" @click="userDialogVisible = true; user = scope.row">View </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -49,6 +46,7 @@
                     <el-option label="Female" value="female" />
                 </el-select>
             </el-form-item>
+
             <el-form-item label="Email" :label-width="formLabelWidth">
                 <el-input v-model="form.email" autocomplete="off" />
             </el-form-item>
@@ -80,7 +78,10 @@
                 </el-col>
             </el-row>
             <el-form-item label="Address" :label-width="formLabelWidth">
-                <el-input v-model="form.name" autocomplete="off" />
+                <el-input v-model="form.address" autocomplete="off" />
+            </el-form-item>
+            <el-form-item label="Password" :label-width="formLabelWidth">
+                <el-input v-model="form.password" autocomplete="off" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -92,12 +93,16 @@
             </span>
         </template>
     </el-dialog>
+    <user-detail @userDetailClosed="userDialogVisible = false" :initialUser="user" :dialogVisible="userDialogVisible" />
+
 </template>
 
 <script>
 import { isArray } from '@vue/shared'
 import { reactive, ref } from 'vue'
 import axios from '../../plugins/axios'
+import { mapState, mapGetters } from 'vuex'
+import UserDetail from '../../components/UserDetail.vue'
 import {
     Check,
     Delete,
@@ -108,6 +113,9 @@ import {
     View
 } from '@element-plus/icons-vue'
 export default {
+    components: {
+UserDetail
+    },
     data() {
         return {
             form: {
@@ -115,15 +123,16 @@ export default {
                 lastName: '',
                 gender: '',
                 email: '',
-                countryId: '',
-                stateId: '',
-                cityId: '',
+                countryId: null,
+                stateId: null,
+                cityId: null,
                 address: ''
             },
             View,
             dialogFormVisible: ref(false),
             search: '',
-            users: [],
+            user: null,
+            userDialogVisible: ref(false),
             countries: [],
             states: [],
             cities: [],
@@ -172,7 +181,8 @@ export default {
                 countryId: '',
                 stateId: '',
                 cityId: '',
-                address: ''
+                address: '',
+                password: ''
 
             }
         },
@@ -180,7 +190,7 @@ export default {
             this.saving = true
             axios.post('admin/users', this.form).then(response => {
                 console.log('saved', response.data)
-                this.users.push(response.data)
+                this.$store.commit('addUser', response.data)
                 this.saving = false
                 this.alert = {
                     message: 'New user created successfully',
@@ -200,8 +210,16 @@ export default {
         }
     },
     created() {
-        this.getUsers()
+        // this.getUsers()
+        this.$store.commit('fetchUsers')
         this.getCountries()
     },
+    computed: {
+        ... mapState({
+    }),
+    ...mapGetters({
+        users : 'getUsers'
+    })
+    }
 }
 </script>

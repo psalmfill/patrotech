@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import BootstrapVue from "bootstrap-vue";
 import ElementPlus from "element-plus";
+import store from "./store/index"
 import "element-plus/dist/index.css";
 import "./assets/main.css";
 // import axios from "./plugins/axios";
@@ -42,6 +43,7 @@ library.add(
 );
 app.use(VueAxios, axios);
 app.use(router);
+app.use(store);
 // app.use(BootstrapVue);
 app.use(VueGoogleMaps, {
   load: {

@@ -26,7 +26,7 @@
                 <template #default="scope">
 
                     <router-link :to="`/dashboard/users/${scope.row.id}`">
-                        <el-button>View</el-button>
+                        <el-button type="primary" :icon="View">View </el-button>
                     </router-link>
                 </template>
             </el-table-column>
@@ -93,7 +93,9 @@
                 </el-col>
             </el-row>
             <el-form-item label="Address" :label-width="formLabelWidth">
-                <el-input v-model="form.name" autocomplete="off" />
+                <el-input v-model="form.address" autocomplete="off" />
+            </el-form-item><el-form-item label="Password" :label-width="formLabelWidth">
+                <el-input v-model="form.password" autocomplete="off" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -111,10 +113,20 @@
 import { isArray } from '@vue/shared'
 import { reactive, ref } from 'vue'
 import axios from '../../plugins/axios'
+import {
+    Check,
+    Delete,
+    Edit,
+    Message,
+    Search,
+    Star,
+    View
+} from '@element-plus/icons-vue'
 
 export default {
     data() {
         return {
+            formLabelWidth: '100%',
             form: {
                 firstName: '',
                 lastName: '',
@@ -123,8 +135,10 @@ export default {
                 countryId: '',
                 stateId: '',
                 cityId: '',
-                address: ''
+                address: '',
+                password: ''
             },
+            View,
             dialogFormVisible: ref(false),
             search: '',
             users: [],

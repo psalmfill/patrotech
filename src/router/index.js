@@ -11,7 +11,8 @@ import ProfileView from "../views/dashboard/ProfileView.vue";
 import TeamTypesView from "../views/dashboard/TeamTypesView.vue";
 import TeamView from "../views/dashboard/TeamView.vue";
 import TeamDetailView from "../views/dashboard/TeamDetailView.vue";
-// import ProfileView from "../views/dashboard/ProfileView.vue";
+import AlertsView from "../views/dashboard/AlertsView.vue";
+import LocationsView from "../views/dashboard/LocationsView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -69,6 +70,18 @@ const router = createRouter({
           path: "teams/:id",
           name: "dashboard-team-detail",
           component: TeamDetailView,
+        },
+
+        {
+          path: "alerts",
+          name: "dashboard-alerts",
+          component: AlertsView,
+        },
+
+        {
+          path: "locations",
+          name: "dashboard-locations",
+          component: LocationsView,
         },
         {
           path: "profile",

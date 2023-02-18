@@ -1,21 +1,18 @@
 <template>
-    <div class="container mt-4">
-        <h1>User</h1>
-        <el-card class="border-0 shadow-none">
+    <el-dialog v-loading="loading" v-model="dialogVisible" @closed="$emit('userDetailClosed')" title="User Profile"
+        width="60%" center>
+        <template #default>
+            <div class="col-md-4 offset-8 text-right">
+                <el-button type="primary" @click="dialogFormVisible = true">Edit User</el-button>
+            </div>
+            <el-divider />
+            
             <div class="row">
                 <div class="col-md-3 text-center">
-                    <img src="../../assets/images/user?.jpg" class=" rounded-circle" width="200" />
+                    <img src="@/assets/images/user.jpg" class=" rounded-circle w-100"  />
                     <el-button class="mt-2">Change</el-button>
                 </div>
                 <div class="col-md-8">
-                    <el-button class="mt-2 float-right btn-primary" @click="dialogFormVisible = true">
-                        <el-icon>
-                            <Edit />
-                        </el-icon>
-                        &nbsp;
-                        Edit
-                    </el-button>
-
                     <div class="">
                         <h6 class="text-secondary">Name</h6>
                         <h5>{{ user?.firstName }} {{ user?.lastName }}</h5>
@@ -57,8 +54,8 @@
                     </div>
                 </div>
             </div>
-        </el-card>
-        <el-dialog v-model="dialogFormVisible" title="Edit User">
+
+            <el-dialog v-model="dialogFormVisible" title="Edit User">
             <el-alert v-if="alert.message" :title="alert.message" :type="alert.type" effect="dark"
                 @close="() => { alert = { message: '', type: '' }; }" />
             <el-form v-loading="saving" :model="form" label-position="top">
@@ -118,34 +115,33 @@
                 </span>
             </template>
         </el-dialog>
-
-    </div>
-
+        </template>
+    </el-dialog>
 </template>
 <script>
-import axios from "../../plugins/axios"
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
+import axios from '@/plugins/axios'
+import StateDetail from './StateDetail.vue'
+
 export default {
+    props: ['initialUser', 'dialogVisible'],
+    components: {
+        StateDetail
+    },
     data() {
         return {
-            user: null,
+            user: this.initialUser,
             form: {
-                firstName: '',
-                lastName: '',
-                gender: '',
-                email: '',
-                countryId: '',
-                phoneNumber: '',
-                stateId: '',
-                cityId: '',
-                address: ''
+                name: '',
+                code: '',
+                phoneCode: '',
+                countryId: null
             },
-            dialogFormVisible: ref(false),
-            search: '',
-            users: [],
-            countries: [],
             states: [],
-            cities: [],
+            state: null,
+            loading: ref(false),
+            dialogFormVisible: ref(false),
+            stateDialogVisible: ref(false),
             saving: false,
             alert: {
                 message: '',
@@ -153,14 +149,10 @@ export default {
             }
         }
     },
-    async created() {
-         this.getUser();
-         this.getCountries()
-    },
     methods: {
         getUser() {
-            const id = this.$route.params.id
-            axios.get(`admin/users/${id}`).then(response => {
+            this.user = this.initialUser
+            axios.get(`admin/users/${this.user.id}`).then(response => {
                 console.log('response', response.data)
                 this.user = response.data
                 this.form = {
@@ -211,14 +203,17 @@ export default {
             })
         }
 
-    }
+    },
+    beforeUpdate() {
+        this.getUser()
+       
+        this.getCountries()
+    }, 
+   
 }
 </script>
 <style scoped>
-.map {
-    width: 100%;
-    height: 500px;
-    background: #f1f1f1;
-
+.dialog-footer button:first-child {
+    margin-right: 10px;
 }
 </style>
