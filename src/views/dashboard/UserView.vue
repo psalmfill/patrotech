@@ -4,7 +4,7 @@
         <el-card class="border-0 shadow-none">
             <div class="row">
                 <div class="col-md-3 text-center">
-                    <img src="../../assets/images/user?.jpg" class=" rounded-circle" width="200" />
+                    <img src="@/assets/images/user.jpg" class=" rounded-circle" width="200" />
                     <el-button class="mt-2">Change</el-button>
                 </div>
                 <div class="col-md-8">
