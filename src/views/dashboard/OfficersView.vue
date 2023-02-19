@@ -21,13 +21,12 @@
 
             <el-table-column align="right">
                 <template #header>
-                    <el-input v-model="search" placeholder="Type to search" />
+                    <!-- <el-input v-model="search" placeholder="Type to search" /> -->
+                    Action
                 </template>
                 <template #default="scope">
-
-                    <router-link :to="`/dashboard/users/${scope.row.id}`">
-                        <el-button type="primary" :icon="View">View </el-button>
-                    </router-link>
+                    <el-button type="primary" size="small" :icon="View"
+                        @click="userDialogVisible = true; user = scope.row">View </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -107,6 +106,7 @@
             </span>
         </template>
     </el-dialog>
+    <user-detail @userDetailClosed="userDialogVisible = false" :initialUser="user" :dialogVisible="userDialogVisible" />
 </template>
 
 <script>
@@ -122,6 +122,8 @@ import {
     Star,
     View
 } from '@element-plus/icons-vue'
+import UserDetail from '../../components/UserDetail.vue'
+
 
 export default {
     data() {
@@ -140,6 +142,8 @@ export default {
             },
             View,
             dialogFormVisible: ref(false),
+            user: null,
+            userDialogVisible: ref(false),
             search: '',
             users: [],
             countries: [],

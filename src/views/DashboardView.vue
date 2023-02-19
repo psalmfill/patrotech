@@ -145,6 +145,13 @@ export default {
   data() {
     return {};
   },
+  mounted(){
+    
+    const token = localStorage.getItem('access_token')
+    if (!token) {
+      window.location = '/'
+    }
+  }
 };
 </script>
 <style>

@@ -25,7 +25,8 @@
                     Action
                 </template>
                 <template #default="scope">
-                        <el-button type="primary" :icon="View" @click="userDialogVisible = true; user = scope.row">View </el-button>
+                    <el-button type="primary" size="small" :icon="View"
+                        @click="userDialogVisible = true; user = scope.row">View </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -114,7 +115,7 @@ import {
 } from '@element-plus/icons-vue'
 export default {
     components: {
-UserDetail
+        UserDetail
     },
     data() {
         return {
@@ -215,11 +216,11 @@ UserDetail
         this.getCountries()
     },
     computed: {
-        ... mapState({
-    }),
-    ...mapGetters({
-        users : 'getUsers'
-    })
+        ...mapState({
+        }),
+        ...mapGetters({
+            users: 'getUsers'
+        })
     }
 }
 </script>

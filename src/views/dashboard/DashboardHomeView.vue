@@ -14,17 +14,24 @@
         <div class="emergencies mt-4">
             <h2>Latest Emergencies</h2>
             <el-row :gutter="0">
-                <el-col :span="6" v-for="p in 4" :key="p" class="p-2">
-                    <el-card class="box-card">
-                        <h4>Incident</h4>
+                <el-col :span="6" v-for="al in alerts" :key="al.id" class="p-2">
+                    <el-card class="box-card" :header="al.type.toUpperCase()"    @click="alert = al; alertDialogVisible = true;">
+                        <div class="d-flex justify-content-between">
+                            <h5>Client</h5>
+                            <div>{{ al.user.fullName }}</div>
+                        </div>
                     </el-card>
                 </el-col>
             </el-row>
         </div>
     </div>
 
+    <alert-dialog @alertDialogClosed="alertDialogVisible = false" :initialAlert="alert"
+        :dialogVisible="alertDialogVisible" />
 </template>
 <script>
+import axios from '../../plugins/axios'
+
 export default {
     data() {
         return {
@@ -55,7 +62,21 @@ export default {
                     },
                 },
             ],
+            alerts :[],
+            alert: null,
+            alertDialogVisible: false,
         }
+    },
+    methods: {
+        getAlerts() {
+            axios.get('admin/alerts').then(response => {
+                console.log('response', response)
+                this.alerts = response.data
+            })
+        },
+    },
+    created() {
+        this.getAlerts()
     }
 }
 </script>

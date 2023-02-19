@@ -48,7 +48,9 @@ export default {
         localStorage.setItem('access_token', JSON.stringify(response.data))
 
         this.isLoading = false
-        this.$router.push('/dashboard')
+        // this.$router.push('/dashboard')
+      window.location = '/dashboard'
+
       }).catch(error => {
         console.log('error', error)
         this.isLoading = false
@@ -59,7 +61,7 @@ export default {
   created() {
     const token = localStorage.getItem('access_token')
     if (token) {
-      this.$router.push('dashboard')
+      window.location = '/dashboard'
     }
   }
 }

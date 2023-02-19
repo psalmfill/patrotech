@@ -3,7 +3,7 @@
         <h3>Alerts</h3>
         <el-divider />
         <br>
-        <el-table style="width: 100%" :data="alerts" stripe border>
+        <el-table style="width: 100%" :data="alerts" v-loading="loading" stripe border>
             <el-table-column label="SN" type="index" />
             <el-table-column label="User" prop="user.fullName" />
             <el-table-column label="Gender" prop="user.gender" />
@@ -11,29 +11,26 @@
             <el-table-column label="Longitude" prop="longitude" />
             <el-table-column label="Latitude" prop="latitude" />
             <el-table-column label="Status" prop="status" />
-            <el-table-column label="Date" prop="createdAt"
-                :formatter="(v) => new Date(v.createdAt).toLocaleString()" />
+            <el-table-column label="Date" prop="createdAt" :formatter="(v) => new Date(v.createdAt).toLocaleString()" />
 
             <el-table-column align="center">
                 <template #header>
                     Action
                 </template>
                 <template #default="scope">
-
-                    <router-link :to="`/dashboard/users/${scope.row.id}`">
-                        <el-button type="primary" :icon="View">View </el-button>
-                    </router-link>
+                    <el-button type="primary" size="small" :icon="View"
+                        @click="alert = scope.row; alertDialogVisible = true;">View </el-button>
                 </template>
             </el-table-column>
         </el-table>
     </div>
-
+    <alert-dialog @alertDialogClosed="alertDialogVisible = false" :initialAlert="alert"
+        :dialogVisible="alertDialogVisible" />
 </template>
 
 <script>
-import { isArray } from '@vue/shared'
-import { reactive, ref } from 'vue'
 import axios from '../../plugins/axios'
+import { reactive, ref } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import {
     Check,
@@ -44,7 +41,9 @@ import {
     Star,
     View
 } from '@element-plus/icons-vue'
+import AlertDialog from '../../components/AlertDialog.vue'
 export default {
+    components: { AlertDialog },
     data() {
         return {
             form: {
@@ -59,12 +58,15 @@ export default {
             },
             View,
             dialogFormVisible: ref(false),
+            alertDialogVisible: ref(false),
             search: '',
             alerts: [],
+            alert: null,
             countries: [],
             states: [],
             cities: [],
             saving: false,
+            loading: ref(false),
             alert: {
                 message: '',
                 type: ''
@@ -78,12 +80,14 @@ export default {
     },
     methods: {
         getAlerts() {
+            this.loading = true;
             axios.get('admin/alerts').then(response => {
                 console.log('response', response)
                 this.alerts = response.data
+                this.loading = false
             })
         },
-        
+
         saveUser() {
             this.saving = true
             axios.post('admin/users', this.form).then(response => {
@@ -111,11 +115,11 @@ export default {
         this.getAlerts()
     },
     computed: {
-        ... mapState({
-    }),
-    ...mapGetters({
-        
-    })
+        ...mapState({
+        }),
+        ...mapGetters({
+
+        })
     }
 }
 </script>
