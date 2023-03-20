@@ -35,7 +35,7 @@
             <el-form-item label="Code" :label-width="formLabelWidth">
                 <el-input v-model="form.code" :rows="2"  placeholder="Code" />
             </el-form-item>
-            <el-form-item label="Code" :label-width="formLabelWidth">
+            <el-form-item label="Phone Code" :label-width="formLabelWidth">
                 <el-input v-model="form.phoneCode" :rows="2"  placeholder="Phone Code" />
             </el-form-item>
         </el-form>

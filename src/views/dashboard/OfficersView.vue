@@ -93,7 +93,13 @@
             </el-row>
             <el-form-item label="Address" :label-width="formLabelWidth">
                 <el-input v-model="form.address" autocomplete="off" />
-            </el-form-item><el-form-item label="Password" :label-width="formLabelWidth">
+                <el-form-item label="Role" :label-width="formLabelWidth">
+                    <el-select v-model="form.roleId" placeholder="Please select city">
+                        <el-option v-for="role in roles" :key="role.id" :label="role.name" :value="role.id" />
+                    </el-select>
+                </el-form-item>
+            </el-form-item>
+            <el-form-item label="Password" :label-width="formLabelWidth">
                 <el-input v-model="form.password" autocomplete="off" />
             </el-form-item>
         </el-form>
@@ -137,6 +143,7 @@ export default {
                 countryId: '',
                 stateId: '',
                 cityId: '',
+                roleId: '',
                 address: '',
                 password: ''
             },
@@ -146,6 +153,7 @@ export default {
             userDialogVisible: ref(false),
             search: '',
             users: [],
+            roles: [],
             countries: [],
             states: [],
             cities: [],
@@ -163,14 +171,19 @@ export default {
     },
     methods: {
         getUsers() {
-            axios.get('admin/users').then(response => {
+            axios.get('admin/officers').then(response => {
                 console.log('response', response)
-                this.users = response.data
+                this.users = response.data['data']
             })
         },
         getCountries() {
             axios.get('locations/countries').then(response => {
                 this.countries = response.data
+            })
+        },
+        getRoles() {
+            axios.get('admin/roles').then(response => {
+                this.roles = response.data
             })
         },
         getStates(countryId) {
@@ -224,6 +237,7 @@ export default {
     created() {
         this.getUsers()
         this.getCountries()
+        this.getRoles()
     },
 }
 </script>

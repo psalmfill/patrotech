@@ -105,6 +105,12 @@
                 <el-form-item label="Address" :label-width="formLabelWidth">
                     <el-input v-model="form.address" autocomplete="off" :value="user?.address" />
                 </el-form-item>
+                
+                <el-form-item label="Role" :label-width="formLabelWidth">
+                    <el-select v-model="form.roleId" placeholder="Please select role">
+                        <el-option v-for="role in roles" :key="role.id" :label="role.name" :value="role.id" />
+                    </el-select>
+                </el-form-item>
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
@@ -150,6 +156,11 @@ export default {
         }
     },
     methods: {
+        getRoles() {
+            axios.get('admin/roles').then(response => {
+                this.roles = response.data
+            })
+        },
         getUser() {
             this.user = this.initialUser
             axios.get(`admin/users/${this.user.id}`).then(response => {
@@ -206,6 +217,7 @@ export default {
     },
     beforeUpdate() {
         this.getUser()
+        this.getRoles()
        
         this.getCountries()
     }, 

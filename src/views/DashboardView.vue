@@ -6,16 +6,8 @@
           <el-scrollbar>
             <h2 class="m-3 text-center text-white">Patrotech</h2>
             <el-divider />
-            <el-menu
-              default-active="2"
-              router="true"
-              text-color="#fff"
-              class="el-menu-vertical-demo"
-              background-color="transparent"
-              active-text-color="#ffd04b"
-              @open="handleOpen"
-              @close="handleClose"
-            >
+            <el-menu default-active="2" router="true" text-color="#fff" class="el-menu-vertical-demo"
+              background-color="transparent" active-text-color="#ffd04b" @open="handleOpen" @close="handleClose">
               <el-menu-item index="/dashboard">
                 <el-icon :size="20" :color="'red'">
                   <font-awesome-icon icon="fa-solid fa-dashboard" size="xs" />
@@ -28,6 +20,12 @@
                   <font-awesome-icon icon="fa-solid fa-bell" size="xs" />
                 </el-icon>
                 <span>Alerts</span>
+              </el-menu-item>
+              <el-menu-item index="/dashboard/pins">
+                <el-icon :size="20" :color="'red'">
+                  <font-awesome-icon icon="fa fa-books" size="xs" />
+                </el-icon>
+                <span>Pins</span>
               </el-menu-item>
               <el-sub-menu index="1">
                 <template #title>
@@ -69,14 +67,16 @@
 
               <el-sub-menu index="2">
                 <template #title>
-                  <el-icon><setting /></el-icon>
+                  <el-icon>
+                    <setting />
+                  </el-icon>
                   <span>System Configuration</span>
                 </template>
                 <el-menu-item-group title="Locations">
                   <el-menu-item index="/dashboard/locations">Locations</el-menu-item>
                 </el-menu-item-group>
                 <el-menu-item-group title="Roles and Permissions">
-                  <el-menu-item index="1-3">Roles</el-menu-item>
+                  <el-menu-item index="/dashboard/roles-and-permissions">Roles</el-menu-item>
                 </el-menu-item-group>
               </el-sub-menu>
               <el-menu-item index="/dashboard/profile">
@@ -87,10 +87,7 @@
               </el-menu-item>
               <el-menu-item index="/">
                 <el-icon :size="20" :color="'red'">
-                  <font-awesome-icon
-                    icon="fa-solid fa-arrow-right-from-bracket"
-                    size="xs"
-                  />
+                  <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="xs" />
                 </el-icon>
                 <span>Logout</span>
               </el-menu-item>
@@ -115,17 +112,14 @@
               </el-menu-item>
               <el-menu-item index="2">
                 <el-icon :size="24" :color="'red'" class="p-4">
-                  <font-awesome-icon
-                    icon="fa-solid fa-arrow-right-from-bracket"
-                    size="xs"
-                  />
+                  <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" size="xs" />
                 </el-icon>
               </el-menu-item>
             </el-menu>
           </el-affix>
         </el-header>
         <el-main class="position-releative">
-          <el-scrollbar >
+          <el-scrollbar>
             <RouterView />
           </el-scrollbar>
         </el-main>
@@ -145,8 +139,8 @@ export default {
   data() {
     return {};
   },
-  mounted(){
-    
+  mounted() {
+
     const token = localStorage.getItem('access_token')
     if (!token) {
       window.location = '/'

@@ -13,6 +13,8 @@ import TeamView from "../views/dashboard/TeamView.vue";
 import TeamDetailView from "../views/dashboard/TeamDetailView.vue";
 import AlertsView from "../views/dashboard/AlertsView.vue";
 import LocationsView from "../views/dashboard/LocationsView.vue";
+import RolesAndPermissionsView from "../views/dashboard/RolesAndPermissionsView.vue";
+import PinCollectionsView from "../views/dashboard/PinCollectionsView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -70,6 +72,18 @@ const router = createRouter({
           path: "teams/:id",
           name: "dashboard-team-detail",
           component: TeamDetailView,
+        },
+
+        {
+          path: "roles-and-permissions",
+          name: "dashboard-roles-and-permissions",
+          component: RolesAndPermissionsView,
+        },
+
+        {
+          path: "pins",
+          name: "dashboard-pins",
+          component: PinCollectionsView,
         },
 
         {

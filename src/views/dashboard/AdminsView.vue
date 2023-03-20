@@ -142,9 +142,9 @@ export default {
     },
     methods: {
         getUsers() {
-            axios.get('admin/users').then(response => {
+            axios.get('admin/').then(response => {
                 console.log('response', response)
-                this.users = response.data
+                this.users = response.data['data']
             })
         },
         getCountries() {

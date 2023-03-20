@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import ElementPlus from "element-plus";
-import store from "./store/index"
+import store from "./store/index";
 import "element-plus/dist/index.css";
 import "./assets/main.css";
 // import axios from "./plugins/axios";
@@ -46,7 +46,7 @@ app.use(store);
 // app.use(BootstrapVue);
 app.use(VueGoogleMaps, {
   load: {
-    key: "",
+    key: import.meta.env.VITE_GOOGLE_MAP_API,
   },
 });
 app.component("font-awesome-icon", FontAwesomeIcon);

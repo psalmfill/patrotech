@@ -1,10 +1,10 @@
 <template>
     <div class="container pt-4">
-        <h3>Users</h3>
+        <h3>Clients</h3>
         <el-divider />
         <div class="row">
             <div class="col-md-4 offset-8 text-right">
-                <el-button type="primary" @click="dialogFormVisible = true">New User</el-button>
+                <el-button type="primary" @click="dialogFormVisible = true">New Cleint</el-button>
             </div>
         </div>
         <br>
@@ -16,8 +16,7 @@
             <el-table-column label="Gender" prop="gender" />
             <el-table-column label="State" prop="state.name" />
             <el-table-column label="City" prop="city.name" />
-            <el-table-column label="Join Date" prop="createdAt"
-                :formatter="(v) => new Date(v.createdAt).toDateString()" />
+            <el-table-column label="Join Date" prop="createdAt" :formatter="(v) => new Date(v.createdAt).toDateString()" />
 
             <el-table-column align="center">
                 <template #header>
@@ -95,7 +94,6 @@
         </template>
     </el-dialog>
     <user-detail @userDetailClosed="userDialogVisible = false" :initialUser="user" :dialogVisible="userDialogVisible" />
-
 </template>
 
 <script>
@@ -153,7 +151,7 @@ export default {
         getUsers() {
             axios.get('admin/users').then(response => {
                 console.log('response', response)
-                this.users = response.data
+                this.users = response.data['data']
             })
         },
         getCountries() {

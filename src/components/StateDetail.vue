@@ -6,7 +6,7 @@
                 <el-button type="primary" @click="dialogFormVisible = true">New City</el-button>
             </div>
         <el-divider />
-        <el-table v-loading="loading" :data="states">
+        <el-table v-loading="loading" :data="cities">
             <el-table-column label="SN" type="index" />
             <el-table-column label="Name" prop="name" />
             <el-table-column label="Code" prop="code" />
@@ -73,8 +73,9 @@ export default {
             
             axios.get(`locations/states/${this.state.id}/cities`)
             .then(response => {
+                console.log(response, 'yyyyyyyyyyyyyyyyyyyyyyyyy')
                 this.loading = false
-                this.states = response.data
+                this.cities = response.data
             }).catch(error => {
                 this.loading = false
             })

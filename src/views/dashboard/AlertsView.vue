@@ -83,7 +83,7 @@ export default {
             this.loading = true;
             axios.get('admin/alerts').then(response => {
                 console.log('response', response)
-                this.alerts = response.data
+                this.alerts = response.data['data']
                 this.loading = false
             })
         },
