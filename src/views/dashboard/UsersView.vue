@@ -133,6 +133,7 @@ export default {
             user: null,
             userDialogVisible: ref(false),
             countries: [],
+            users: [],
             states: [],
             cities: [],
             saving: false,
@@ -150,8 +151,7 @@ export default {
     methods: {
         getUsers() {
             axios.get('admin/users').then(response => {
-                console.log('response', response)
-                this.users = response.data['data']
+                this.users = response.data.data
             })
         },
         getCountries() {
@@ -160,7 +160,6 @@ export default {
             })
         },
         getStates(countryId) {
-            console.log('getState', countryId)
             axios.get(`locations/countries/${countryId}/states`).then(response => {
                 this.states = response.data
             })
@@ -189,7 +188,7 @@ export default {
             this.saving = true
             axios.post('admin/users', this.form).then(response => {
                 console.log('saved', response.data)
-                this.$store.commit('addUser', response.data)
+                // this.$store.commit('addUser', response.data)
                 this.saving = false
                 this.alert = {
                     message: 'New user created successfully',
@@ -208,17 +207,17 @@ export default {
             })
         }
     },
-    created() {
-        // this.getUsers()
-        this.$store.commit('fetchUsers')
+    mounted() {
+        this.getUsers()
+        // this.$store.commit('fetchUsers')
         this.getCountries()
     },
     computed: {
-        ...mapState({
-        }),
-        ...mapGetters({
-            users: 'getUsers'
-        })
+        // ...mapState({
+        // }),
+        // ...mapGetters({
+        //     users: 'getUsers'
+        // })
     }
 }
 </script>

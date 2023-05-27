@@ -1,19 +1,19 @@
 <template>
     <el-dialog class="alert-dialog h-100 bg-light" v-loading="loading" v-model="dialogVisible"
         @closed="$emit('alertDialogClosed')" width="100%" height="100%" top="0" center
-        :title="`${alert?.type} alert from ${alert?.user.fullName} @ ${alert?.location}`.toUpperCase() ">
+        :title="`${alert?.type} alert from ${alert?.user.fullName} @ ${alert?.location}`.toUpperCase()">
         <div class="row no-gutters">
             <div class="col-10">
                 <div class="map position-relative">
                     <GMapMap :center="{
                         lat: +initialAlert.latitude,
                         lng: +initialAlert.longitude,
-                    }" :zoom="10" map-type-id="terrain" class="h-100 w-100"  :options="options">
+                    }" :zoom="10" map-type-id="terrain" class="h-100 w-100" :options="options">
                         <GMapCluster :zoomOnClick="true">
                             <GMapMarker :position="{
                                 lat: +initialAlert.latitude,
                                 lng: +initialAlert.longitude,
-                            }" :clickable="true" :draggable="true" @click="center = {
+                            }" :clickable="true" @click="center = {
     lat: +initialAlert.latitude,
     lng: +initialAlert.longitude,
 }" />

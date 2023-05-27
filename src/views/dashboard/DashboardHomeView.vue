@@ -1,26 +1,35 @@
 <template>
-    <div class="container-fluid  p-3">
+    <div class="container-fluid">
         <div class="map position-relative">
             <GMapMap :center="center" :zoom="7" map-type-id="terrain" class="h-100 w-100" :options="options">
-                <GMapCluster>
-                    <GMapMarker :key="index" v-for="(m, index) in markers" :position="m.position" :clickable="true"
-                        :draggable="true" @click="center = m.position" />
+                <GMapCluster :zoomOnClick="true">
+                    <GMapMarker :key="index" v-for="(m, index) in officersMarkers" :position="m.position" :clickable="true"
+                        @click="center = m.position" />
+
+                    <GMapMarker :key="index" v-for="(m, index) in alertsMarkers" :position="m.position" :clickable="true"
+                        @click="center = m.position" />
                 </GMapCluster>
             </GMapMap>
         </div>
 
     </div>
-    <div class="container">
+    <div class="">
         <div class="emergencies mt-4">
-            <h2>Latest Emergencies</h2>
+            <h2>Recent Emergencies</h2>
+            <hr>
             <el-row :gutter="0">
                 <el-col :span="6" v-for="al in alerts" :key="al.id" class="p-2">
-                    <el-card class="box-card" :header="al.type.toUpperCase()"
+                    <el-card class="box-card shadow-sm bg-light" :header="al.type.toUpperCase()"
                         @click="alert = al; alertDialogVisible = true;">
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between cursor-pointer">
                             <h5>Client</h5>
-                            <div>{{ al.user.fullName }}</div>
+                            <div>
+                                <div>{{ al.user.firstName }}</div>
+                                <small class="d-block">{{ al.user.phoneNumber }}</small>
+                            </div>
                         </div>
+                        <small class="text-danger">{{ al.location }}
+                        </small>
                     </el-card>
                 </el-col>
             </el-row>
@@ -36,7 +45,7 @@ import axios from '../../plugins/axios'
 export default {
     data() {
         return {
-            center: { lat: 4.929987, lng: 7.87216 },
+            // center: { lat: 4.929987, lng: 7.87216 },
             markers: [
                 {
                     position: {
@@ -44,24 +53,7 @@ export default {
                         lng: 6.84212,
                     },
                 },
-                {
-                    position: {
-                        lat: 4.198429,
-                        lng: 6.69529,
-                    },
-                },
-                {
-                    position: {
-                        lat: 4.165218,
-                        lng: 7.067116,
-                    },
-                },
-                {
-                    position: {
-                        lat: 4.09256,
-                        lng: 6.84074,
-                    },
-                },
+
             ],
             options: {
                 styles: [
@@ -299,6 +291,7 @@ export default {
                 ]
             },
             alerts: [],
+            officers: [],
             alert: null,
             alertDialogVisible: false,
         }
@@ -307,12 +300,47 @@ export default {
         getAlerts() {
             axios.get('admin/alerts').then(response => {
                 console.log('response', response)
-                this.alerts = response.data
+                this.alerts = response.data['data']
+            })
+        },
+        getOfficersInRange(latitude, longitude, type = 'Police') {
+            axios.get(`admin/officer-in-range?latitude=${latitude}&longitude=${longitude}&officerType=${type}`).then(response => {
+                console.log('officers', response)
+                this.officers = response.data
             })
         },
     },
+    computed: {
+        officersMarkers() {
+            return this.officers.map(e => {
+                e.position = {
+                    lat: parseFloat(e.currentLatitude), lng: parseFloat(e.currentLongitude)
+                }
+                return e
+            })
+        },
+        alertsMarkers() {
+            return this.alerts.map(e => {
+                e.position = {
+                    lat: parseFloat(e.latitude), lng: parseFloat(e.longitude)
+                }
+                return e
+            })
+        },
+        center() {
+            const e = this.alerts.pop()
+            if (e) {
+                e.position = {
+                    lat: parseFloat(e.latitude), lng: parseFloat(e.longitude)
+                }
+                return e
+            }
+            return { lat: 4.929987, lng: 7.87216 }
+        }
+    },
     created() {
         this.getAlerts()
+        this.getOfficersInRange(4.9299, 7.87216)
     }
 }
 </script>

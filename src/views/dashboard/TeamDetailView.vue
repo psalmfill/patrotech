@@ -39,8 +39,8 @@
             @close="() => { alert = { message: '', type: '' }; }" />
         <el-form v-loading="saving" :model="form" label-position="top">
             <el-form-item label="Team Members">
-                <el-select-v2 v-model="form.membersIds" value-key="id" label-key="id" style="width:100%" multiple
-                    filterable remote :remote-method="getUsers" clearable :options="users.map(e => {
+                <el-select-v2 v-model="form.membersIds" value-key="id" label-key="id" style="width:100%" multiple filterable
+                    remote :remote-method="getUsers" clearable :options="users.map(e => {
                         return {
                             ...e, label: `${e.firstName} ${e.lastName}`
                         }
@@ -134,7 +134,7 @@ export default {
         getUsers() {
             axios.get('admin/users').then(response => {
                 console.log('response', response)
-                this.users = response.data
+                this.users = response.data.data
             })
         },
         getTeam() {

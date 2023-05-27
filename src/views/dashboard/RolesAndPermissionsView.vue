@@ -22,7 +22,7 @@
                 </template>
                 <template #default="scope">
                     <el-button type="primary" size="small" :icon="View"
-                        @click="userDialogVisible = true; user = scope.row">View </el-button>
+                        @click="roleDialogVisible = true; role = scope.row">View </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -37,7 +37,7 @@
             <el-form-item label="Description" :label-width="formLabelWidth">
                 <el-input v-model="form.description" autocomplete="off" />
             </el-form-item>
-            
+
         </el-form>
         <template #footer>
             <span class="dialog-footer">
@@ -48,7 +48,8 @@
             </span>
         </template>
     </el-dialog>
-    <user-detail @userDetailClosed="userDialogVisible = false" :initialUser="user" :dialogVisible="userDialogVisible" />
+    <edit-role @editRoleClosed="roleDialogVisible = false; getRoles()" :initialRole="role"
+        :dialogVisible="roleDialogVisible" />
 </template>
 
 <script>
@@ -64,10 +65,12 @@ import {
     Star,
     View
 } from '@element-plus/icons-vue'
-import UserDetail from '../../components/UserDetail.vue'
-
+import EditRole from '../../components/EditRole.vue'
 
 export default {
+    components: {
+        EditRole
+    },
     data() {
         return {
             formLabelWidth: '100%',
@@ -76,12 +79,12 @@ export default {
                 description: '',
                 permissions: [],
 
-               
+
             },
             View,
             dialogFormVisible: ref(false),
             role: null,
-            userDialogVisible: ref(false),
+            roleDialogVisible: ref(false),
             search: '',
             roles: [],
             permissions: [],
@@ -103,7 +106,7 @@ export default {
                 this.roles = response.data
             })
         },
-       
+
 
         resetForm() {
             this.form = {
@@ -111,7 +114,7 @@ export default {
                 description: '',
                 permissions: [],
 
-                        }
+            }
         },
         saveRole() {
             this.saving = true

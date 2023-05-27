@@ -41,7 +41,7 @@
                 <el-input v-model="form.description" :rows="2" type="textarea" placeholder="Please input" />
             </el-form-item>
             <el-form-item label="Type">
-                <el-select v-model="form.teamId" placeholder="Please select team type" style="width:100%">
+                <el-select v-model="form.teamTypeId" placeholder="Please select team type" style="width:100%">
                     <el-option v-for="teamType in teamTypes" :key="teamType.id" :label="teamType.name"
                         :value="teamType.id" />
                 </el-select>
@@ -168,12 +168,12 @@ export default {
 
         getTeams() {
             axios.get('admin/teams').then(response => {
-                console.log('response', response)
                 this.teams = response.data['data']
             })
         },
         getTeamTypes() {
             axios.get('admin/team-types').then(response => {
+                console.log("team", response.data)
                 this.teamTypes = response.data
             })
         },
@@ -182,12 +182,13 @@ export default {
             this.form = {
                 name: '',
                 description: '',
-                teamId: null,
+                teamTypeId: null,
                 leadId: null,
             }
         },
         saveTeam() {
             this.saving = true
+            console.log(this.form)
             axios.post('admin/teams', this.form).then(response => {
                 console.log('saved', response.data)
                 this.teams.push(response.data)

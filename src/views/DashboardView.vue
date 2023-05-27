@@ -118,7 +118,7 @@
             </el-menu>
           </el-affix>
         </el-header>
-        <el-main class="position-releative">
+        <el-main class="position-relative">
           <el-scrollbar>
             <RouterView />
           </el-scrollbar>
