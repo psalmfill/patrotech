@@ -1,7 +1,7 @@
 <template>
   <div class="common-layout h-100 position-absolute w-100">
     <el-container class="h-100">
-      <el-aside width="250px" class="bg-primary h-100">
+      <el-aside width="250px" class="bg-dark h-100">
         <el-affix position="top">
           <el-scrollbar>
             <h2 class="m-3 text-center text-white">Patrotech</h2>
@@ -96,9 +96,9 @@
         </el-affix>
       </el-aside>
       <el-container>
-        <el-header>
+        <el-header class="bg-transparent">
           <el-affix position="top">
-            <el-menu mode="horizontal" :ellipsis="false" @select="handleSelect">
+            <el-menu mode="horizontal bg-transparent" :ellipsis="false" @select="handleSelect">
               <div class="flex-grow" />
               <el-menu-item index="1">
                 <el-icon :size="24" :color="'red'" class="p-4">

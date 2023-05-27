@@ -1,14 +1,14 @@
 <template>
-    <el-dialog class="alert-dialog h-100 bg-light" v-loading="loading" v-model="dialogVisible"
+    <el-dialog class="alert-dialog bg-dark text-white " v-loading="loading" v-model="dialogVisible"
         @closed="$emit('alertDialogClosed')" width="100%" height="100%" top="0" center
         :title="`${alert?.type} alert from ${alert?.user.fullName} @ ${alert?.location}`.toUpperCase()">
         <div class="row no-gutters">
-            <div class="col-10">
+            <div class="col-md-10">
                 <div class="map position-relative">
                     <GMapMap :center="{
                         lat: +initialAlert.latitude,
                         lng: +initialAlert.longitude,
-                    }" :zoom="10" map-type-id="terrain" class="h-100 w-100" :options="options">
+                    }" :zoom="50" map-type-id="terrain" class="h-100 w-100" :options="options">
                         <GMapCluster :zoomOnClick="true">
                             <GMapMarker :position="{
                                 lat: +initialAlert.latitude,
@@ -22,11 +22,11 @@
                 </div>
 
             </div>
-            <div class="col-2 p-2">
-                <h5 class="text-center">Alert Detail</h5>
-                <table class="table table-striped">
+            <div class="col-md-2 p-2">
+                <h5 class="text-center ">Alert Detail</h5>
+                <table class="table table-striped text-white ">
                     <tr>
-                        <td>Client</td>
+                        <td class="">Client</td>
                         <td>{{ alert?.user.fullName }}</td>
                     </tr>
 

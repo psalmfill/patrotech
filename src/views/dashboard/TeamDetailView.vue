@@ -42,7 +42,7 @@
                 <el-select-v2 v-model="form.membersIds" value-key="id" label-key="id" style="width:100%" multiple filterable
                     remote :remote-method="getUsers" clearable :options="users.map(e => {
                         return {
-                            ...e, label: `${e.firstName} ${e.lastName}`
+                            ...e, label: `${e.fullName}`
                         }
                     })" :loading="loading" placeholder="Please enter a user name">
                     <template #default="{ item }">
@@ -132,7 +132,7 @@ export default {
                 })
         },
         getUsers() {
-            axios.get('admin/users').then(response => {
+            axios.get('admin/officers').then(response => {
                 console.log('response', response)
                 this.users = response.data.data
             })

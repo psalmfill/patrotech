@@ -18,7 +18,7 @@
             <h2>Recent Emergencies</h2>
             <hr>
             <el-row :gutter="0">
-                <el-col :span="6" v-for="al in alerts" :key="al.id" class="p-2">
+                <el-col :span="12" :md="6" :sm="12" v-for="al in alerts" :key="al.id" class="p-2">
                     <el-card class="box-card shadow-sm bg-light" :header="al.type.toUpperCase()"
                         @click="alert = al; alertDialogVisible = true;">
                         <div class="d-flex justify-content-between cursor-pointer">
